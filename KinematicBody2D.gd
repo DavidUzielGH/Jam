@@ -14,6 +14,8 @@ var going_idle = true
 
 var velocity = Vector2()
 
+var tpDistance = 10
+
 var anim_thread = Thread.new()
 var speed_thread = Thread.new()
 var animation_player
@@ -28,13 +30,20 @@ func _ready():
 	speed_thread.start(self, "_speed_analisis_thread", null)
 
 func _physics_process(delta):
+	var movX = 0
 	if !self.is_on_floor():
-		velocity.y += -delta * GRAVITY #Se calcula el descenso por gravedad tomando en cuenta el tiempo entre frames
+		velocity.y += -delta * GRAVITY 
+		#Se calcula el descenso por gravedad tomando en 
+		#cuenta el tiempo entre frames
 	if Input.is_action_pressed("Left"):
+		movX = -tpDistance
 		going_idle = false
-		velocity.x -= 1 #Este decremento de velocidad es para evitar que el metodo se cicle
+		velocity.x -= 1 
+		#Este decremento de velocidad 
+		#es para evitar que el metodo se cicle
 		_take_input_and_move_in_x(MOVING.Left)
 	elif Input.is_action_pressed("Right"):
+		movX = tpDistance
 		velocity.x += 1
 		going_idle = false
 		_take_input_and_move_in_x(MOVING.Right)
@@ -45,16 +54,23 @@ func _physics_process(delta):
 	if Input.is_action_pressed("Jump") and self.is_on_floor(): 
 		going_idle = false
 		velocity.y = -JUMP_HEIGHT
-	move_and_slide(velocity, Vector2(0, -1))
-	
-	
+		
+	if Input.is_action_pressed("tp") and movX != 0:
+		teleport(movX)
+		
+	move_and_slide(velocity, Vector2(0, -1))	
 
-func _take_input_and_move_in_x(speed_sign): #Recibe una constante que indica si la velocidad va a aumentar o reducir (1, -1)
+func _take_input_and_move_in_x(speed_sign): #Recibe una constante que indica 
+	#si la velocidad va a aumentar o reducir (1, -1)
 	if velocity.x < MAX_SPEED and velocity.x > -MAX_SPEED:
-		velocity.x += ACCELERATION * speed_sign #Se multiplica la aceleración por la constante para hacerla negativa o positiva
+		velocity.x += ACCELERATION * speed_sign #Se multiplica la aceleración 
+		#por la constante para hacerla negativa o positiva
 	else:
 		velocity.x = MAX_SPEED * speed_sign #Lo mismo aqui
 
+func teleport(movX):
+	velocity.x += ACCELERATION * movX
+	
 func _deaccelerate_until_idle():
 	if _get_sign_from(velocity.x) == -1:
 		idle_direction = MOVING.Left
