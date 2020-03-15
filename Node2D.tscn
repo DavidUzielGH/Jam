@@ -21,7 +21,7 @@ tracks/0/keys = {
 "values": [ 7 ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=3]
 length = 3.2
 loop = true
 tracks/0/type = "value"
@@ -49,7 +49,7 @@ tracks/1/keys = {
 "values": [ false, false, false ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=4]
 resource_name = "Turning_left"
 length = 3.2
 loop = true
@@ -78,7 +78,7 @@ tracks/1/keys = {
 "values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=5]
 resource_name = "Turning_right"
 length = 3.2
 loop = true
@@ -107,8 +107,7 @@ tracks/1/keys = {
 "values": [ false, false, false ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "Walking"
+[sub_resource type="Animation" id=6]
 length = 3.2
 loop = true
 tracks/0/type = "value"
@@ -149,10 +148,10 @@ shape = SubResource( 1 )
 pause_mode = 2
 playback_speed = 3.4
 anims/Idle = SubResource( 2 )
-anims/Right = SubResource( 4 )
-anims/Turning_left = SubResource( 5 )
-anims/Turning_right = SubResource( 6 )
-anims/Walking = SubResource( 3 )
+anims/Right = SubResource( 3 )
+anims/Turning_left = SubResource( 4 )
+anims/Turning_right = SubResource( 5 )
+anims/Walking = SubResource( 6 )
 script = ExtResource( 3 )
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]

@@ -14,7 +14,7 @@ var going_idle = true
 
 var velocity = Vector2()
 
-var tpDistance = 10
+var tpDistance = 30
 
 var anim_thread = Thread.new()
 var speed_thread = Thread.new()
@@ -35,21 +35,19 @@ func is_airborne():
 		return true
 	else:
 		return false
+		
 func _physics_process(delta):
-	var movX = 0
 	if !self.is_on_floor():
-		velocity.y += -delta * GRAVITY 
+		velocity.y += delta * GRAVITY 
 		#Se calcula el descenso por gravedad tomando en 
 		#cuenta el tiempo entre frames
 	if Input.is_action_pressed("Left"):
-		movX = -tpDistance
 		going_idle = false
 		velocity.x -= 1 
 		#Este decremento de velocidad 
 		#es para evitar que el metodo se cicle
 		_take_input_and_move_in_x(MOVING.Left)
 	elif Input.is_action_pressed("Right"):
-		movX = tpDistance
 		velocity.x += 1
 		going_idle = false
 		_take_input_and_move_in_x(MOVING.Right)
@@ -61,8 +59,8 @@ func _physics_process(delta):
 		going_idle = false
 		velocity.y = -JUMP_HEIGHT
 		
-	if Input.is_action_pressed("tp") and movX != 0:
-		teleport(movX)
+	if Input.is_action_pressed("tp"):
+		teleport()
 		
 	move_and_slide(velocity, Vector2(0, -1))	
 
@@ -75,11 +73,14 @@ func _take_input_and_move_in_x(speed_sign): #Recibe una constante que indica
 	else:
 		velocity.x = MAX_SPEED * speed_sign #Lo mismo aqui
 
-func teleport(movX):
-	velocity.x += ACCELERATION * movX
-	
+func teleport():
+	if anim_state == ANIMATE.Idle_left:
+		self.position.x += +30
+	elif anim_state == ANIMATE.Idle_right:
+		self.position.x += -30
+
 func _deaccelerate_until_idle():
-	if _get_sign_from(velocity.x) == -1:
+	if get_sign_from(velocity.x) == -1:
 		idle_direction = MOVING.Left
 	else:
 		idle_direction = MOVING.Right
